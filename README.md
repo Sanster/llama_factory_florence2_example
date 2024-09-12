@@ -1,11 +1,21 @@
 # LLaMA Factory Florence-2
 
 This repo is a demo for using [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) to fine-tune [Florence-2](https://huggingface.co/microsoft/Florence-2-large) on [TF-ID-arxiv-papers dataset](https://huggingface.co/datasets/yifeihu/TF-ID-arxiv-papers).
-Please first install the environment according to the README of [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory?tab=readme-ov-file#installation).
 
 <img src="./example_result.png" alt="example result" height="600px">
 
-## Data
+## Install LLaMA-Factory
+
+I have submitted a [PR](https://github.com/hiyouga/LLaMA-Factory/pull/5424) to LLaMA-Factory. Before the PR is merged, you can use my forked [LLaMA-Factory](https://github.com/Sanster/LLaMA-Factory/tree/florence2) project.
+
+```bash
+git clone --depth 1 https://github.com/Sanster/LLaMA-Factory.git
+cd LLaMA-Factory
+git checkout florence2
+pip install -e ".[torch,metrics]"
+```
+
+## Prepare Data
 
 Download images from https://huggingface.co/datasets/yifeihu/TF-ID-arxiv-papers/tree/main
 
