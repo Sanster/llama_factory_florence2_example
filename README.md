@@ -107,8 +107,15 @@ Change vision_config's `model_type`
 
 ## Inference
 
-使用训练好的模型进行推理
-
 ```bash
 python3 demo.py LLaMA-Factory/saves/florence2-large/full/sft example.png
+# </s><s>table<loc_70><loc_543><loc_932><loc_676>figure<loc_61><loc_76><loc_942><loc_462></s>
+# Image saved to output.png
+```
+
+Use the trained model for inference. In [post_process_generation](https://huggingface.co/microsoft/Florence-2-large/blob/39ddb416a9819d9fa1bacad7b7899099ae4b0a59/processing_florence2.py#L307), the
+model's output string will be parsed, and the final result will be in the following format:
+
+```json
+{"<OD>": {"bboxes": [[x1, y1, x2, y2], ...], "labels": ["label1", "label2", ...]} }
 ```
