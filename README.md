@@ -3,7 +3,7 @@
 This repo is a demo for using [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) to fine-tune [Florence-2](https://huggingface.co/microsoft/Florence-2-large) on [TF-ID-arxiv-papers dataset](https://huggingface.co/datasets/yifeihu/TF-ID-arxiv-papers).
 Please first install the environment according to the README of [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory?tab=readme-ov-file#installation).
 
-<img src="./example_result.png" alt="example result" style="max-height: 400px;">
+<img src="./example_result.png" alt="example result" height="600px">
 
 ## Data
 
@@ -116,6 +116,6 @@ python3 demo.py LLaMA-Factory/saves/florence2-large/full/sft example.png
 Use the trained model for inference. In [post_process_generation](https://huggingface.co/microsoft/Florence-2-large/blob/39ddb416a9819d9fa1bacad7b7899099ae4b0a59/processing_florence2.py#L307), the
 model's output string will be parsed, and the final result will be in the following format:
 
-```json
+```
 {"<OD>": {"bboxes": [[x1, y1, x2, y2], ...], "labels": ["label1", "label2", ...]} }
 ```
