@@ -1,8 +1,21 @@
 # LLaMA Factory Florence-2
 
+This repo is a demo for using [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) to fine-tune [Florence-2](https://huggingface.co/microsoft/Florence-2-large) on [TF-ID-arxiv-papers dataset](https://huggingface.co/datasets/yifeihu/TF-ID-arxiv-papers).
+Please first install the environment according to the README of [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory?tab=readme-ov-file#installation).
 
+<img src="./example_result.png" alt="example result" style="max-height: 400px;">
 
-Download data from https://huggingface.co/datasets/yifeihu/TF-ID-arxiv-papers/tree/main
+## Data
+
+Download images from https://huggingface.co/datasets/yifeihu/TF-ID-arxiv-papers/tree/main
+
+```bash
+wget https://huggingface.co/datasets/yifeihu/TF-ID-arxiv-papers/resolve/main/arxiv_paper_images.zip
+```
+
+Copy `arxiv_paper_images.zip` to `LLaMA-Factory/data` folder, unzip `arxiv_paper_images.zip`, and rename the folder to `TF-ID-arxiv-papers`
+
+Download annotations from https://huggingface.co/datasets/yifeihu/TF-ID-arxiv-papers/tree/main
 
 ```bash
 wget https://huggingface.co/datasets/yifeihu/TF-ID-arxiv-papers/raw/main/annotations_no_caption.json
@@ -14,7 +27,25 @@ Convert `annotations_no_caption.json` to LLaMA-Factory format:
 python3 convert.py annotations_no_caption.json TF-ID-arxiv-papers.json
 ```
 
-Copy `TF-ID-arxiv-papers.json` to LLaMA-Factory/data dir, and add new dataset in `dataset_info.json` file:
+The converted format is as follows, where the 'loc' in the assistant's response represents normalized coordinates ranging from [0, 1000]. `<OD>` stands for the `Object Detection` task, which in the Florence-2 [processor](https://huggingface.co/microsoft/Florence-2-large/blob/39ddb416a9819d9fa1bacad7b7899099ae4b0a59/processing_florence2.py#L118) will be converted to the actual prompt "Locate the objects with category name in the image."
+
+```json
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "<OD>"
+    },
+    {
+      "role": "assistant",
+      "content": "table<loc_173><loc_507><loc_837><loc_656>figure<loc_170><loc_80><loc_827><loc_403>"
+    }
+  ],
+  "images": ["TF-ID-arxiv-papers_demo_data/arxiv_2407_02687_7.png"]
+}
+```
+
+Copy `TF-ID-arxiv-papers.json` to `LLaMA-Factory/data/` dir, and add new dataset in `dataset_info.json` file:
 
 ```json
  "TF-ID-arxiv-papers": {
@@ -34,6 +65,8 @@ Copy `TF-ID-arxiv-papers.json` to LLaMA-Factory/data dir, and add new dataset in
 ```
 
 Edit `LLaMA-Factory/examples/train_full/florence2_full_sft.yaml` file, change `dataset` to `TF-ID-arxiv-papers`
+
+## Training
 
 Start training:
 
@@ -66,10 +99,16 @@ Change vision_config's `model_type`
 
 ```json
 {
-  'vision_config': {
-      ...
-      "model_type": "davit"
-      ...
+  "vision_config": {
+    "model_type": "davit"
   }
 }
+```
+
+## Inference
+
+使用训练好的模型进行推理
+
+```bash
+python3 demo.py LLaMA-Factory/saves/florence2-large/full/sft example.png
 ```
